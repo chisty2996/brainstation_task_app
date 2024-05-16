@@ -23,3 +23,10 @@ class HomeStateFetched extends HomeState{
 class HomeStateError extends HomeState{
  const HomeStateError(DioException? dioException): super(dioException: dioException);
 }
+
+class HomeStateFiltered extends HomeState {
+  final List<HomeEntity> filteredItems;
+
+  const HomeStateFiltered({required this.filteredItems});
+
+}
