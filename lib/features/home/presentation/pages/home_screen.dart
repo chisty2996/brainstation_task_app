@@ -96,7 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
               return const Center(child: Text("No items found"));
             }
           } else if (state is HomeStateError) {
-            return Center(child: Text("Error: ${state.dioException?.message ?? 'Unknown error'}"));
+            return Center(child: Column(
+              children: [
+                Text("Error: ${state.dioException?.message ?? 'Unknown error'}"),
+                SizedBox(height: 2,),
+                ElevatedButton(onPressed: (){
+
+                  context.read<HomeBloc>().add(const GetItems());
+                }, child: Text("Retry")),
+              ],
+            ));
           } else {
             return const Center(child: Text("No items found"));
           }

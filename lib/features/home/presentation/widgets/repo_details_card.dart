@@ -1,3 +1,4 @@
+import 'package:brainstation_task_app/core/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 
 class RepoDetailsCard extends StatelessWidget {
@@ -34,14 +35,14 @@ class RepoDetailsCard extends StatelessWidget {
           children: [
             _buildRow(Icons.description, "Description", description),
             const SizedBox(height: 10.0),
-            _buildRow(Icons.update, "Last Updated", lastUpdated),
+            _buildRow(Icons.calendar_month_outlined, "Last Updated", DateTimeUtilities.formatDateTime(lastUpdated)),
             const SizedBox(height: 10.0),
             _buildRow(Icons.visibility, "Visibility", visibility),
             const SizedBox(height: 10.0),
             _buildRow(Icons.star, "Stars Count", starsCount.toString()),
             const SizedBox(height: 10.0),
             _buildRow(Icons.book, "Repo Name", repoName),
-            const SizedBox(height: 10.0),
+            // const SizedBox(height: 10.0),
             _buildRow(Icons.numbers, "Repo ID", repoId.toString()),
             const SizedBox(height: 10.0),
             _buildRow(Icons.person, "Owner ID", ownerId.toString()),
@@ -82,4 +83,6 @@ class RepoDetailsCard extends StatelessWidget {
       ],
     );
   }
+
+
 }
