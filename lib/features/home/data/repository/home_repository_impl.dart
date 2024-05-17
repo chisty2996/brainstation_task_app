@@ -11,9 +11,9 @@ class HomeRepositoryImpl implements HomeRepository{
   HomeRepositoryImpl(this._homeApiService);
 
   @override
-  Future<DataState<List<HomeModel>>> getHomeItems() async{
+  Future<DataState<List<HomeModel>>> getHomeItems(int pageNo) async{
     try{
-      return await _homeApiService.getHomeItems();
+      return await _homeApiService.getHomeItems(pageNo);
 
     }
     catch(e,s){

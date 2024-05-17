@@ -10,19 +10,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState>  {
   final GetHomeItemUseCase getHomeItemUseCase;
   List<HomeEntity> previousItems = [];
+  int currentPage = 1;
 
   HomeBloc({required this.getHomeItemUseCase}):super(const HomeStateLoading()){
     on<GetItems>(onGetItems);
     on<FilterItems>(onFilterItems);
+    on<LoadMoreItems>(onLoadMoreItems);
   }
 
   void onGetItems(HomeEvent event, Emitter<HomeState> emit) async{
-    log("previous items: ${previousItems.length}");
-    if (previousItems.isNotEmpty) {
-      emit(HomeStateFetched(previousItems)); // Emit previously fetched data
-      return;
-    }
-    final dataState = await getHomeItemUseCase();
+    // log("previous items: ${previousItems.length}");
+    // if (previousItems.isNotEmpty) {
+    //   emit(HomeStateFetched(previousItems)); // Emit previously fetched data
+    //   return;
+    // }
+    // else{
+    //
+    // }
+    currentPage = 1;
+    final dataState = await getHomeItemUseCase(currentPage);
     List<HomeEntity> entities = dataState.data??[];
     if(dataState is DataSuccess && entities.isNotEmpty){
       previousItems = entities;
@@ -35,6 +41,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState>  {
     else {
       emit(const HomeStateFetched([])); // Emit an empty list if there's no data
     }
+
+  }
+
+  void onLoadMoreItems(HomeEvent event, Emitter<HomeState> emit) async {
+    emit(HomeStateLoadingMore(previousItems));
+    currentPage++;
+    final dataState = await getHomeItemUseCase(currentPage);
+    List<HomeEntity> newEntities = dataState.data ?? [];
+    if (dataState is DataSuccess && newEntities.isNotEmpty) {
+      previousItems.addAll(newEntities);
+      emit(HomeStateFetched(previousItems));
+    } else if (dataState is DataFailed) {
+      emit(HomeStateError(dataState.dioException));
+    } else {
+      // No more data to load, keep the state as it is
+      emit(HomeStateFetched(previousItems));
+    }
   }
 
   void onFilterItems(FilterItems event, Emitter<HomeState> emit) {
@@ -45,9 +68,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState>  {
           : (currentState as HomeStateFetched).homeItems ?? [];
       final filteredItems = items
           .where((item) =>
-          (item.title??"").toLowerCase().contains(event.keyword.toLowerCase()))
+          (item.id??"").toString().contains(event.keyword.toLowerCase()))
           .toList();
       emit(HomeStateFiltered(filteredItems: filteredItems));
+    }
+    else{
+      emit(const HomeStateFiltered(filteredItems: []));
     }
   }
 }

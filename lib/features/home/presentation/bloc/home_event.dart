@@ -11,3 +11,7 @@ class FilterItems extends HomeEvent {
 
   const FilterItems(this.keyword);
 }
+
+class LoadMoreItems extends HomeEvent {
+  const LoadMoreItems();
+}

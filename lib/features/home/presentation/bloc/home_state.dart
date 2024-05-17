@@ -30,3 +30,12 @@ class HomeStateFiltered extends HomeState {
   const HomeStateFiltered({required this.filteredItems});
 
 }
+
+class HomeStateLoadingMore extends HomeState {
+  final List<HomeEntity> currentItems;
+
+  const HomeStateLoadingMore(this.currentItems) : super(homeItems: currentItems);
+
+  @override
+  List<Object?> get props => [currentItems];
+}

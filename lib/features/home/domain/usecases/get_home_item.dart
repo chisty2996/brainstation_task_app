@@ -8,7 +8,7 @@ class GetHomeItemUseCase{
 
   GetHomeItemUseCase({required this.homeRepository});
 
-  Future<DataState<List<HomeEntity>>> call(){
-    return homeRepository.getHomeItems();
+  Future<DataState<List<HomeEntity>>> call(int pageNo){
+    return homeRepository.getHomeItems(pageNo);
   }
 }
